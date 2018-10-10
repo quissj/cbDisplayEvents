@@ -48,6 +48,7 @@ void DisplayEvents::OnAttach()
     pm->RegisterEventSink(cbEVT_APP_START_SHUTDOWN, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_APP_ACTIVATED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_APP_DEACTIVATED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_APP_CMDLINE, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_PLUGIN_ATTACHED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_PLUGIN_RELEASED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_PLUGIN_INSTALLED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
@@ -63,10 +64,10 @@ void DisplayEvents::OnAttach()
     pm->RegisterEventSink(cbEVT_EDITOR_MODIFIED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_EDITOR_TOOLTIP, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_EDITOR_TOOLTIP_CANCEL, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
-    pm->RegisterEventSink(cbEVT_EDITOR_BREAKPOINT_ADD, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
-    pm->RegisterEventSink(cbEVT_EDITOR_BREAKPOINT_EDIT, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
-    pm->RegisterEventSink(cbEVT_EDITOR_BREAKPOINT_DELETE, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_EDITOR_SPLIT, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_EDITOR_UNSPLIT, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_EDITOR_UPDATE_UI, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_EDITOR_CC_DONE, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_PROJECT_NEW, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_PROJECT_CLOSE, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_PROJECT_OPEN, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
@@ -82,7 +83,11 @@ void DisplayEvents::OnAttach()
     pm->RegisterEventSink(cbEVT_PROJECT_POPUP_MENU, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_PROJECT_TARGETS_MODIFIED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_PROJECT_RENAMED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_PROJECT_OPTIONS_CHANGED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_WORKSPACE_CHANGED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_WORKSPACE_LOADING_COMPLETE, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_WORKSPACE_CLOSING_BEGIN, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_WORKSPACE_CLOSING_COMPLETE, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_BUILDTARGET_ADDED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_BUILDTARGET_REMOVED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_BUILDTARGET_RENAMED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
@@ -100,9 +105,14 @@ void DisplayEvents::OnAttach()
     pm->RegisterEventSink(cbEVT_COMPILER_SET_BUILD_OPTIONS, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_CLEAN_PROJECT_STARTED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_CLEAN_WORKSPACE_STARTED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_COMPILER_SETTINGS_CHANGED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_COMPILE_FILE_REQUEST, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_DEBUGGER_STARTED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_DEBUGGER_PAUSED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_DEBUGGER_FINISHED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_COMPLETE_CODE, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_SHOW_CALL_TIP, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_SETTINGS_CHANGED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
 
     pm->RegisterEventSink(cbEVT_ADD_DOCK_WINDOW, new cbEventFunctor<DisplayEvents, CodeBlocksDockEvent>(this, &DisplayEvents::OnDockEventOccured));
     pm->RegisterEventSink(cbEVT_REMOVE_DOCK_WINDOW, new cbEventFunctor<DisplayEvents, CodeBlocksDockEvent>(this, &DisplayEvents::OnDockEventOccured));
@@ -137,6 +147,7 @@ void DisplayEvents::OnEventOccured(CodeBlocksEvent& event)
     else if(type==cbEVT_APP_START_SHUTDOWN) msg.Append(_("cbEVT_APP_START_SHUTDOWN"));
     else if(type==cbEVT_APP_ACTIVATED) msg.Append(_("cbEVT_APP_ACTIVATED"));
     else if(type==cbEVT_APP_DEACTIVATED) msg.Append(_("cbEVT_APP_DEACTIVATED"));
+    else if(type==cbEVT_APP_CMDLINE) msg.Append(_("cbEVT_APP_CMDLINE"));
     else if(type==cbEVT_PLUGIN_ATTACHED) msg.Append(_("cbEVT_PLUGIN_ATTACHED"));
     else if(type==cbEVT_PLUGIN_RELEASED) msg.Append(_("cbEVT_PLUGIN_RELEASED"));
     else if(type==cbEVT_PLUGIN_INSTALLED) msg.Append(_("cbEVT_PLUGIN_INSTALLED"));
@@ -152,10 +163,10 @@ void DisplayEvents::OnEventOccured(CodeBlocksEvent& event)
     else if(type==cbEVT_EDITOR_MODIFIED) msg.Append(_("cbEVT_EDITOR_MODIFIED"));
     else if(type==cbEVT_EDITOR_TOOLTIP) msg.Append(_("cbEVT_EDITOR_TOOLTIP"));
     else if(type==cbEVT_EDITOR_TOOLTIP_CANCEL) msg.Append(_("cbEVT_EDITOR_TOOLTIP_CANCEL"));
-    else if(type==cbEVT_EDITOR_BREAKPOINT_ADD) msg.Append(_("cbEVT_EDITOR_BREAKPOINT_ADD"));
-    else if(type==cbEVT_EDITOR_BREAKPOINT_EDIT) msg.Append(_("cbEVT_EDITOR_BREAKPOINT_EDIT"));
-    else if(type==cbEVT_EDITOR_BREAKPOINT_DELETE) msg.Append(_("cbEVT_EDITOR_BREAKPOINT_DELETE"));
+    else if(type==cbEVT_EDITOR_SPLIT) msg.Append(_("cbEVT_EDITOR_SPLIT"));
+    else if(type==cbEVT_EDITOR_UNSPLIT) msg.Append(_("cbEVT_EDITOR_UNSPLIT"));
     else if(type==cbEVT_EDITOR_UPDATE_UI) msg.Append(_("cbEVT_EDITOR_UPDATE_UI"));
+    else if(type==cbEVT_EDITOR_CC_DONE) msg.Append(_("cbEVT_EDITOR_CC_DONE"));
     else if(type==cbEVT_PROJECT_NEW) msg.Append(_("cbEVT_PROJECT_NEW"));
     else if(type==cbEVT_PROJECT_CLOSE) msg.Append(_("cbEVT_PROJECT_CLOSE"));
     else if(type==cbEVT_PROJECT_OPEN) msg.Append(_("cbEVT_PROJECT_OPEN"));
@@ -170,7 +181,11 @@ void DisplayEvents::OnEventOccured(CodeBlocksEvent& event)
     else if(type==cbEVT_PROJECT_POPUP_MENU) msg.Append(_("cbEVT_PROJECT_POPUP_MENU"));
     else if(type==cbEVT_PROJECT_TARGETS_MODIFIED) msg.Append(_("cbEVT_PROJECT_TARGETS_MODIFIED"));
     else if(type==cbEVT_PROJECT_RENAMED) msg.Append(_("cbEVT_PROJECT_RENAMED"));
+    else if(type==cbEVT_PROJECT_OPTIONS_CHANGED) msg.Append(_("cbEVT_PROJECT_OPTIONS_CHANGED"));
     else if(type==cbEVT_WORKSPACE_CHANGED) msg.Append(_("cbEVT_WORKSPACE_CHANGED"));
+    else if(type==cbEVT_WORKSPACE_LOADING_COMPLETE) msg.Append(_("cbEVT_WORKSPACE_LOADING_COMPLETE"));
+    else if(type==cbEVT_WORKSPACE_CLOSING_BEGIN) msg.Append(_("cbEVT_WORKSPACE_CLOSING_BEGIN"));
+    else if(type==cbEVT_WORKSPACE_CLOSING_COMPLETE) msg.Append(_("cbEVT_WORKSPACE_CLOSING_COMPLETE"));
     else if(type==cbEVT_BUILDTARGET_ADDED) msg.Append(_("cbEVT_BUILDTARGET_ADDED"));
     else if(type==cbEVT_BUILDTARGET_REMOVED) msg.Append(_("cbEVT_BUILDTARGET_REMOVED"));
     else if(type==cbEVT_BUILDTARGET_RENAMED) msg.Append(_("cbEVT_BUILDTARGET_RENAMED"));
@@ -188,10 +203,14 @@ void DisplayEvents::OnEventOccured(CodeBlocksEvent& event)
     else if(type==cbEVT_COMPILER_SET_BUILD_OPTIONS) msg.Append(_("cbEVT_COMPILER_SET_BUILD_OPTIONS"));
     else if(type==cbEVT_CLEAN_PROJECT_STARTED) msg.Append(_("cbEVT_CLEAN_PROJECT_STARTED"));
     else if(type==cbEVT_CLEAN_WORKSPACE_STARTED) msg.Append(_("cbEVT_CLEAN_WORKSPACE_STARTED"));
-    else if(type==cbEVT_DEBUGGER_STARTED) msg.Append(_("cbEVT_DEBUGGER_STARTED"));
+    else if(type==cbEVT_COMPILER_SETTINGS_CHANGED) msg.Append(_("cbEVT_COMPILER_SETTINGS_CHANGED"));
+    else if(type==cbEVT_COMPILE_FILE_REQUEST) msg.Append(_("cbEVT_COMPILE_FILE_REQUEST"));
     else if(type==cbEVT_DEBUGGER_STARTED) msg.Append(_("cbEVT_DEBUGGER_STARTED"));
     else if(type==cbEVT_DEBUGGER_PAUSED) msg.Append(_("cbEVT_DEBUGGER_PAUSED"));
     else if(type==cbEVT_DEBUGGER_FINISHED) msg.Append(_("cbEVT_DEBUGGER_FINISHED"));
+    else if(type==cbEVT_COMPLETE_CODE) msg.Append(_("cbEVT_COMPLETE_CODE"));
+    else if(type==cbEVT_SHOW_CALL_TIP) msg.Append(_("cbEVT_SHOW_CALL_TIP"));
+    else if(type==cbEVT_SETTINGS_CHANGED) msg.Append(_("cbEVT_SETTINGS_CHANGED"));
     else msg.Append(_("unknown CodeBlocksEvent"));
     Manager::Get()->GetLogManager()->DebugLog(msg);
 }

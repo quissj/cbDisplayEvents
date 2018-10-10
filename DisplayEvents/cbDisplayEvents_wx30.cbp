@@ -2,14 +2,14 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="cbDisplayEvents" />
+		<Option title="cbDisplayEvents wx3.0.x" />
 		<Option platforms="Windows;" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="default">
-				<Option output="../../devel/share/CodeBlocks/plugins/DisplayEvents.dll" prefix_auto="0" extension_auto="0" />
-				<Option object_output="../../.objs/plugins/DisplayEvents" />
+				<Option output="../../devel30/share/CodeBlocks/plugins/DisplayEvents.dll" prefix_auto="0" extension_auto="0" />
+				<Option object_output="../../.objs30/plugins/DisplayEvents" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option parameters="--debug-log --multiple-instance -na -ns -nd" />
@@ -22,18 +22,18 @@
 					<Add option="-mthreads" />
 					<Add library="codeblocks" />
 					<Add library="wxmsw$(WX_VERSION)$(WX_SUFFIX)" />
-					<Add directory="../../devel" />
+					<Add directory="../../devel30" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="cmd /c if not exist ../../devel\share\CodeBlocks mkdir ../../devel\share\CodeBlocks" />
-					<Add after="zip -jq9 ../../devel/share/CodeBlocks/DisplayEvents.zip manifest.xml" />
+					<Add after="cmd /c if not exist ../../devel30\share\CodeBlocks mkdir ../../devel30\share\CodeBlocks" />
+					<Add after="zip -jq9 ../../devel30/share/CodeBlocks/DisplayEvents.zip manifest.xml" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
 			<Environment>
 				<Variable name="WX_CFG" value="" />
 				<Variable name="WX_SUFFIX" value="u" />
-				<Variable name="WX_VERSION" value="28" />
+				<Variable name="WX_VERSION" value="30" />
 			</Environment>
 		</Build>
 		<VirtualTargets>
@@ -55,11 +55,11 @@
 			<Add option="-DWX_PRECOMP" />
 			<Add option="-DwxUSE_UNICODE" />
 			<Add directory="../../include" />
-			<Add directory="$(#WX.include)" />
-			<Add directory="$(#WX.lib)/gcc_dll$(WX_CFG)/msw$(WX_SUFFIX)" />
+			<Add directory="$(#WX30.include)" />
+			<Add directory="$(#WX30.lib)/gcc_dll$(WX_CFG)/msw$(WX_SUFFIX)" />
 		</Compiler>
 		<Linker>
-			<Add directory="$(#WX.lib)/gcc_dll$(WX_CFG)" />
+			<Add directory="$(#WX30.lib)/gcc_dll$(WX_CFG)" />
 		</Linker>
 		<Unit filename="DisplayEvents.cpp" />
 		<Unit filename="DisplayEvents.h" />
