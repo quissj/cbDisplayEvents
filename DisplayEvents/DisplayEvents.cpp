@@ -109,7 +109,10 @@ void DisplayEvents::OnAttach()
     pm->RegisterEventSink(cbEVT_COMPILE_FILE_REQUEST, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_DEBUGGER_STARTED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_DEBUGGER_PAUSED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_DEBUGGER_CONTINUED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_DEBUGGER_FINISHED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_DEBUGGER_CURSOR_CHANGED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
+    pm->RegisterEventSink(cbEVT_DEBUGGER_UPDATED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_COMPLETE_CODE, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_SHOW_CALL_TIP, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
     pm->RegisterEventSink(cbEVT_SETTINGS_CHANGED, new cbEventFunctor<DisplayEvents, CodeBlocksEvent>(this, &DisplayEvents::OnEventOccured));
@@ -207,7 +210,10 @@ void DisplayEvents::OnEventOccured(CodeBlocksEvent& event)
     else if(type==cbEVT_COMPILE_FILE_REQUEST) msg.Append(_("cbEVT_COMPILE_FILE_REQUEST"));
     else if(type==cbEVT_DEBUGGER_STARTED) msg.Append(_("cbEVT_DEBUGGER_STARTED"));
     else if(type==cbEVT_DEBUGGER_PAUSED) msg.Append(_("cbEVT_DEBUGGER_PAUSED"));
+    else if(type==cbEVT_DEBUGGER_CONTINUED) msg.Append(_("cbEVT_DEBUGGER_CONTINUED"));
     else if(type==cbEVT_DEBUGGER_FINISHED) msg.Append(_("cbEVT_DEBUGGER_FINISHED"));
+    else if(type==cbEVT_DEBUGGER_CURSOR_CHANGED) msg.Append(_("cbEVT_DEBUGGER_CURSOR_CHANGED"));
+    else if(type==cbEVT_DEBUGGER_UPDATED) msg.Append(_("cbEVT_DEBUGGER_UPDATED"));
     else if(type==cbEVT_COMPLETE_CODE) msg.Append(_("cbEVT_COMPLETE_CODE"));
     else if(type==cbEVT_SHOW_CALL_TIP) msg.Append(_("cbEVT_SHOW_CALL_TIP"));
     else if(type==cbEVT_SETTINGS_CHANGED) msg.Append(_("cbEVT_SETTINGS_CHANGED"));
